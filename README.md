@@ -1,4 +1,4 @@
-# Master Thesis project files for the completion of the Masters in Mathematical Finance at Birkbeck College of London.
+# Master Thesis project files for the completion of the MSc in Mathematical Finance at Birkbeck College of London.
 
 ### Main
 - [] Plot implied option prices against market prices with respect to each model
