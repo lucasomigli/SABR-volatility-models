@@ -24,21 +24,30 @@ To add to the main topic, how good are these models with respect to negative int
 - Abstract.
 - Introduction. Outline the main question of the research, therefore identify the objective and the main issues and fixes. What is the contribution to the academic world that this paper sets its objective to? In this case, the paper wants to identify how different these models are woth respect to the actual process and how "good" they are with respect to modelling volatility in Ameirican equity indeces (specifically Nasdaq and SPX). 
 - Literature Review. Reference all the papers I printed out. Explain in detail what are the issues that have been arising in the latest period with respect to modelling future volatilities. Models have grown since the first Black model, but professionals and institutions still rely on ancient methods to understand volatility smiles. Go trough pros and cons on each model. Explain how for example the Heston model was the first real effective stochastic model that comes close enough to market volatilities with a huge downside, the complications of modelling trough a complex set of functions that increase the computational costs (both time, power and consumptions)
+- Mathematical Definitions.
+    - General Assumptions.
+    - Ito's Calculus
+    - Pricing under the risk-neutral measure
 - Theory And Methodology: An history of volatility, from constant to stochastic
-    - Implied volatility in Black-Scholes and Bachelier's Normal model. Explanation of stochastic processes, Brownian motion, Black scholes pricing formula as the solution to the reversed heat equation. Differences with the Bachelier Normal model. The imporant features of the latter model for later implications in sthochastic volatilities.
-    - The need of a new view: changes in volatility smiles across the 80s and 90s. Brief explanation (with graphs?) of volatility smiles and surfaces, with a focus on changes over the years and causes of new trends. 
-    - CEV, Geometric Brownian Motion, the Square Root Process and finally Local Volatility Models (Dupire's formula). Explanation of how we got from using a Constant Elasticity of Variance model in 1976 to a famous formula found by french Bruno Dupire which laid the foundations to Local Volatility models. Pros and Cons of LVM, method, calibration and issues with negative variance. Huge problem: the local volatility models will be able to match the value of the smile as of today, but because the smile flattens for long maturities, the model gives an almost constant smile for these maturities, leading to a flattening of the forward smile (i.e. smile in the future), which is unrealistic. Issues with negative volatility and bad calibration using QuantLib.
-    - Heston stochastic volatility. Finally a first stochastic volatility model, which opens the gate to more realistic volatility smiles. The Heston model also has a additional constrains, discovered by Feller, which constricts the variance to be strictly positive. The objective function minimizes the squared difference between prices observed in the market and prices calculated from the model. We minimise using a plethora of different algorithms which effectively use gradient methods to solve. Explain, mentioning source, all the different minimisation algorithms with their pros and cons. Difficulty of finding the right variables due to a huge bias in choosing initial conditions, leading to higher computational times. 
-    - SABR models. Hagan's formula first gave a push to the new models which still to this day are used in most situations, especially within interest rates derivatives. A more complex and solid framework which more realistically prices options based on volatility of alpha, beta, rho and sigma. We first calibrate the model either using the 1st (directly computing the parameters) or 2nd method (calculating the alpha based on rho and nu). Different new variants contributed overtime to the original model, with a few dealing also with negative interest rates. In total we have the normal SABR model (explain importance of the Bachelier Normal model), the shifted SABR, the Floch-kennedy variant and the mixture and free boundary SABR. 
+    - Bachelier's Normal model. The imporant features of the latter model for the Normal model in later implications for sthochastic volatility models.
+    - Black Model. 
+    - Implied Volatility Under Black-Scholes.
+    - Volatility Smiles and Skews.
+    - Volatility Surfaces.
+    - Constant Elasticity of Variance
+    - Dupire Local Volatility 
+    - Stochastic Volatility and the Heston Model. Finally a first stochastic volatility model, which opens the gate to more realistic volatility smiles. The Heston model also has a additional constrains, discovered by Feller, which constricts the variance to be strictly positive. The objective function minimizes the squared difference between prices observed in the market and prices calculated from the model. We minimise using a plethora of different algorithms which effectively use gradient methods to solve. Explain, mentioning source, all the different minimisation algorithms with their pros and cons. Difficulty of finding the right variables due to a huge bias in choosing initial conditions, leading to higher computational times. 
+    - SABR models. Hagan's formula first gave a push to the new models which still to this day are used in most situations, especially within interest rates derivatives. A more complex and solid framework which more realistically prices options based on volatility of alpha, beta, rho and sigma. We first calibrate the model either using the 1st (directly computing the parameters) or 2nd method (calculating the alpha based on rho and nu. Different new variants contributed overtime to the original model, with a few dealing also with negative interest rates. In total we have the normal SABR model (explain importance of the Bachelier Normal model), the shifted SABR, the Floch-kennedy variant and the mixture and free boundary SABR. 
     SABR models. Differences between normal, shifted and Floch-Kennedy together with the two calibration methods and beta.
-        - Normal SABR. General explanation of calibration process. Plots, graphs and the Backbone behaviour of smiles.
-        - Shifted SABR.
-        - Floch-Kennedy SABR. 
-        - (mention) Free Boundary SABR, Obloj's refinement and mixture models.
+    - SABR Calibration.
+    - Normal SABR. General explanation of calibration process. Plots, graphs and the Backbone behaviour of smiles.
+    - Shifted SABR.
+    - Floch-Kennedy SABR. 
+    - (mention) Free Boundary SABR, Obloj's refinement and mixture models.
     - Beyond SABR models, negative interest rates and issues. Hagan's formula and SABR models have opened the gate for pricing under a negative rates economy. Being a rising major issue in the last two decades, we now have something to work with. Talk about models used in case of negative interest rates: shifted SABR, free-boundary SABR, Bachelier model.
     - (mention) Stochastic local volatility models.
-    - (mention) Monte Carlo implied volatility calculations .
-- Analysis And Results. Statistical testing for errors with respect to variance, plot volatility surfaces and smiles and visualise the differences. 
+    - (mention) Monte Carlo implied volatility calculations.
+- Analysis And Results on SP500 and Nasdaq. Statistical testing for errors with respect to variance, plot volatility surfaces and smiles and visualise the differences. 
     - Graphic comparison ov volatility smiles under different models and tenors.
     - MSE comparisons.
     - Implied price differentials.
