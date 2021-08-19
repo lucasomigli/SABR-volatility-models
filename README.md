@@ -7,15 +7,19 @@ To add to the main topic, how good are these models with respect to negative int
 
 ### Main
 - [] Plot implied option prices against market prices with respect to each model
-- [] Organise thesis theoretical structure. Write down general concept
+- [X] Organise thesis theoretical structure. Write down general concept
 - [] Test using negative interest rates
 - [] Write a clear, non-empirical statistical process for comparing models
+- [] General Review: check Cit. for each formula
+- [] General Review: double check fommulas derivations amd possibly add full to appendix. 
 
 ### Optional
 - [] Add Obloj's refinement model for SABR
-- [] Dupire's Local Volatility Model Surface (now returning negative variance)
-- [] Add Free Boundary SABR model and/or mixed SABR models
+- [] Add Dupire's Local Volatility Model Surface (now returning negative variance)
+- [] Add mixed SABR models
 - [] Add visualised PDF for each model 
+- [] Delta Hedging explanation in paper
+- [] Greeks explanation in paper
 
 --------------------
 
