@@ -6,7 +6,7 @@ A research that will go trogh a bried history of implied volatility over the las
 To add to the main topic, how good are these models with respect to negative interest rates environonments?
 
 ### Main
-- [] Plot implied option prices against market prices with respect to each model
+- [X] Plot implied option prices against market prices with respect to each model
 - [X] Organise thesis theoretical structure. Write down general concept
 - [] Test using negative interest rates
 - [] Write a clear, non-empirical statistical process for comparing models
@@ -14,9 +14,9 @@ To add to the main topic, how good are these models with respect to negative int
 - [] General Review: double check fommulas derivations amd possibly add full to appendix. 
 
 ### Optional
-- [] Add Obloj's refinement model for SABR
-- [] Add Dupire's Local Volatility Model Surface (now returning negative variance)
-- [] Add mixed SABR models
+- [NO] Add Obloj's refinement model for SABR
+- [X] Add Dupire's Local Volatility Model Surface (now returning negative variance)
+- [X] Add mixed SABR models
 - [] Add visualised PDF for each model 
 - [] Delta Hedging explanation in paper
 - [] Greeks explanation in paper
@@ -26,7 +26,7 @@ To add to the main topic, how good are these models with respect to negative int
 ### Thesis tree structure 
 
 - Abstract.
-- Introduction. Outline the main question of the research, therefore identify the objective and the main issues and fixes. What is the contribution to the academic world that this paper sets its objective to? In this case, the paper wants to identify how different these models are woth respect to the actual process and how "good" they are with respect to modelling volatility in Ameirican equity indeces (specifically Nasdaq and SPX). 
+- Introduction. Outline the main question of the research, therefore identify the objective and the main issues and fixes. What is the contribution to the academic world that this paper sets its objective to? In this case, the paper wants to identify how different these models are woth respect to the actual process and how "good" they are with respect to modelling volatility in Ameirican equity indexes (specifically Nasdaq and SPX). 
 - Literature Review. Reference all the papers I printed out. Explain in detail what are the issues that have been arising in the latest period with respect to modelling future volatilities. Models have grown since the first Black model, but professionals and institutions still rely on ancient methods to understand volatility smiles. Go trough pros and cons on each model. Explain how for example the Heston model was the first real effective stochastic model that comes close enough to market volatilities with a huge downside, the complications of modelling trough a complex set of functions that increase the computational costs (both time, power and consumptions)
 - Mathematical Definitions.
     - General Assumptions.
@@ -46,8 +46,9 @@ To add to the main topic, how good are these models with respect to negative int
     - SABR Calibration.
     - Normal SABR. General explanation of calibration process. Plots, graphs and the Backbone behaviour of smiles.
     - Shifted SABR.
-    - Floch-Kennedy SABR. 
-    - (mention) Free Boundary SABR, Obloj's refinement and mixture models.
+    - Free Boundary SABR (Floch-Kennedy). 
+    - Mixture SABR models. 
+    - (mention) Obloj's refinement.
     - Beyond SABR models, negative interest rates and issues. Hagan's formula and SABR models have opened the gate for pricing under a negative rates economy. Being a rising major issue in the last two decades, we now have something to work with. Talk about models used in case of negative interest rates: shifted SABR, free-boundary SABR, Bachelier model.
     - (mention) Stochastic local volatility models.
     - (mention) Monte Carlo implied volatility calculations.
@@ -56,7 +57,7 @@ To add to the main topic, how good are these models with respect to negative int
     - MSE comparisons.
     - Implied price differentials.
     - PDF of volatility implied by each model.
-- Conclusion. Identify pros and cons of each model and define which model is most approrpiate for equity indeces. Do the theretical expectations congrue with the statistical outputs? Explain. 
+- Conclusion. Identify pros and cons of each model and define which model is most approrpiate for equity indexes. Do the theretical expectations congrue with the statistical outputs? Explain. 
     
 ------
 
