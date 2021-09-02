@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 from initialize import *
+from SABR import *
 
 # Plot volatility Surface
 
@@ -58,14 +59,20 @@ def plot_smile(date, smiles, title="", bounds=None, market=True, size=(15, 4)):
 # Plot Volatility Smile Comparisons
 
 
-def smiles_comparison(models, heston_models=[], points=(.2, .4, .6, .8, 1)):
+def smiles_comparison(models=[], heston_models=[], local_models=[], points=(.2, .4, .6, .8, 1), black_volatility=False):
     for i in [round((len(dates)-1) * x) for x in points]:
         tenor = dates[i]
-        l = [([model.vol_surface.blackVol(tenor, s)
-              for s in strikes], model.label) for model in models]
+        l = []
+        l.extend([([model.vol_surface.blackVol(tenor, s)
+                    for s in strikes], model.label) for model in models])
+        if black_volatility:
+            l.extend([([black_var_surface.blackVol(tenor, s)
+                     for s in strikes], "Market IV")])
         if len(heston_models) > 0:
             l.extend([([x.heston_vol_surface.blackVol(tenor, s)
                      for s in strikes], "Heston") for x in heston_models])
-
+        if len(local_models) > 0:
+            l.extend([([x.localVol(tenor, s)
+                     for s in strikes], "Local Volatility") for x in local_models])
         plot_smile(
             tenor, l, title="Volatility Smile for options expiring on {}".format(tenor))
