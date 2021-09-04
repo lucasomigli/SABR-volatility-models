@@ -1,6 +1,6 @@
 from initialize import *
 from SABR import *
-from plots import *
+from plotting import *
 
 
 class hestonModelSurface:

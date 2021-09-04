@@ -9,7 +9,7 @@ import QuantLib as ql
 from scipy.optimize import minimize
 
 from initialize import *
-from plots import *
+from plotting import *
 
 # CALIBRATE SABR VOLATILITY SURFACE
 
@@ -52,7 +52,7 @@ class SABRSmile:
         x = self.set_init_conds()
 
         result = minimize(self.f, x, constraints=cons, method="SLSQP", bounds=(
-            (1e-8, None), (-1, 1), (1e-8, None), (-.999, .999)))
+            (1e-8, None), (0, 1), (1e-8, None), (-.999, .999)))
         self.error = result['fun']
         [self.alpha, self.beta, self.nu, self.rho] = result['x']
 
@@ -73,12 +73,6 @@ class SABRSmile:
     def f(self, params):
 
         alpha, beta, nu, rho = params
-
-        # beta = self.beta
-        # alpha = max(alpha, 1e-8) # Avoid alpha going negative
-        # nu = max(nu, 1e-8) # Avoid nu going negative
-        # rho = max(rho, -0.999) if self.zero_rho==False else 0.0 # Avoid rhp going < -1.0 or set zero correlation
-        # rho = min(rho, 0.999) # Avoid rho going > 1.0
 
         vols = np.array([self.vols_by_method(
             strike, alpha, beta, nu, rho) for strike in strikes])

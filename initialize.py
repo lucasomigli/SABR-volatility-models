@@ -77,7 +77,7 @@ elif data == "GOLD":
     df["Date"] = pd.to_datetime(df["Date"], format='%m/%d/%y')
 
     # Remove strikes from Dataframe
-    fltr = np.arange(1400., 2250., 50)
+    fltr = np.arange(1550., 2250., 50)
     df = df[df['Strike'].isin(fltr)]
     df["IV"] = df["IV"] / 100
 
