@@ -70,7 +70,7 @@ elif data == "COFFEE":
     current_price = 200.
     ATM_price = 200.
 elif data == "SILVER":
-    data_label = "Siver"
+    data_label = "Silver"
     df = pd.read_csv(r'datasets/silver.csv', sep=";")
     df["Date"] = pd.to_datetime(df["Date"], format='%m/%d/%y')
 
