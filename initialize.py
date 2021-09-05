@@ -8,7 +8,7 @@ import math
 import QuantLib as ql
 from scipy.optimize import minimize
 
-data = "OIL"
+data = "SILVER"
 
 
 def date_pd_to_ql(date):
@@ -28,13 +28,13 @@ eonia_rates = pd.read_csv(r'datasets/eonia.csv', sep=";")
 
 if data == "OIL":
     data_label = "WTI Crude Oil"
-    df = pd.read_csv(r'datasets/oil.csv', sep=";")
+    df = pd.read_csv(r'datasets/oil_new.csv', sep=";")
     df["Date"] = pd.to_datetime(df["Date"], format='%m/%d/%y')
 
     # Remove strikes from Dataframe
-    # fltr = [41, 45, 47, 48, 50, 52, 54, 55, 60, 62, 64, 66, 70, 72, 75, 80]
-    fltr = [50, 52, 54, 55, 60, 62, 64, 66, 70, 72]
+    fltr = np.arange(36, 84, 1)
     df = df[df['Strike'].isin(fltr)]
+
     df["IV"] = df["IV"] / 100
 
     current_time = pd.Timestamp(year=2021, month=8, day=30, hour=19)
@@ -69,6 +69,20 @@ elif data == "COFFEE":
     today = date_pd_to_ql(current_time)
     current_price = 200.
     ATM_price = 200.
+elif data == "SILVER":
+    data_label = "Siver"
+    df = pd.read_csv(r'datasets/silver.csv', sep=";")
+    df["Date"] = pd.to_datetime(df["Date"], format='%m/%d/%y')
+
+    # Remove strikes from Dataframe
+    fltr = np.arange(17, 35, 1)
+    df = df[df['Strike'].isin(fltr)]
+    df["IV"] = df["IV"] / 100
+
+    current_time = pd.Timestamp(year=2021, month=8, day=31, hour=19)
+    today = date_pd_to_ql(current_time)
+    current_price = 25.
+    ATM_price = 25.
 
 
 maturities = df["Date"].unique()
