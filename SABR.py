@@ -25,11 +25,12 @@ black_var_surface.enableExtrapolation()
 
 
 class SABRSmile:
-    def __init__(self, date, shift=0, beta=1, method="normal", fwd=current_price, zero_rho=False):
+    def __init__(self, date, marketVols, shift=0, beta=1, method="normal", strikes=strikes, fwd=current_price, zero_rho=False):
         self.date = date
         self.expiryTime = round((self.date - today)/365, 6)
-        self.marketVols = vols[dates.index(self.date)]
+        self.marketVols = marketVols
         self.shift = shift
+        self.strikes = strikes
         self.fwd = fwd
         self.forward_price = self.fwd * \
             math.exp(rate.value() * self.expiryTime)
@@ -57,7 +58,7 @@ class SABRSmile:
         [self.alpha, self.beta, self.nu, self.rho] = result['x']
 
         self.newVols = [self.vols_by_method(
-            strike, self.alpha, self.beta, self.nu, self.rho) for strike in strikes]
+            strike, self.alpha, self.beta, self.nu, self.rho) for strike in self.strikes]
 
     def set_init_conds(self):
         return [self.alpha, self.beta, self.nu, self.rho]
@@ -75,7 +76,7 @@ class SABRSmile:
         alpha, beta, nu, rho = params
 
         vols = np.array([self.vols_by_method(
-            strike, alpha, beta, nu, rho) for strike in strikes])
+            strike, alpha, beta, nu, rho) for strike in self.strikes])
 
         self.error = ((vols - np.array(self.marketVols))**2).mean() ** .5
 
@@ -83,10 +84,11 @@ class SABRSmile:
 
 
 class SABRVolatilitySurface:
-    def __init__(self, method="normal", beta=1, shift=0, fwd=current_price, label="", zero_rho=False):
+    def __init__(self, strks=strikes, method="normal", beta=1, shift=0, fwd=current_price, label="", zero_rho=False):
         self.method = method
         self._beta = beta
         self.shift = shift
+        self.strikes = strks
         self.fwd = fwd
         self.label = label
         self.zero_rho = zero_rho
@@ -96,11 +98,18 @@ class SABRVolatilitySurface:
     def initialize(self):
         self.vol_surface_vector, self.errors, self.smiles, self.alpha, self.beta, self.nu, self.rho = [
         ], [], [], [], [], [], []
+
         self.SABRVolMatrix, self.SABRVolDiffMatrix = (
-            ql.Matrix(len(strikes), len(dates)), ql.Matrix(len(strikes), len(dates)))
+            ql.Matrix(len(self.strikes), len(dates)), ql.Matrix(len(self.strikes), len(dates)))
 
         for i, d in enumerate(dates):
-            volSABR = SABRSmile(date=d, beta=self._beta, shift=self.shift,
+
+            v = []
+            for j in range(len(self.strikes)):
+                if self.strikes[i] in strikes:
+                    v.append(vols[i][j])
+
+            volSABR = SABRSmile(date=d, beta=self._beta, strikes=self.strikes, marketVols=v, shift=self.shift,
                                 method=self.method, fwd=self.fwd, zero_rho=self.zero_rho)
             volSABR.initialize()
 
@@ -120,10 +129,10 @@ class SABRVolatilitySurface:
             for j in range(len(smile)):
                 self.SABRVolMatrix[j][i] = smile[j]
                 self.SABRVolDiffMatrix[j][i] = (
-                    smile[j] - vols[i][j]) / vols[i][j]
+                    smile[j] - v[j]) / v[j]
 
             self.vol_surface = ql.BlackVarianceSurface(
-                today, calendar, dates, strikes, self.SABRVolMatrix, day_count)
+                today, calendar, dates, self.strikes, self.SABRVolMatrix, day_count)
             self.vol_surface.enableExtrapolation()
 
     def to_data(self):
@@ -133,7 +142,7 @@ class SABRVolatilitySurface:
 
 
 # Backbone modelling for SABR
-def SABR_backbone_plot(beta=1, bounds=None, shift=0, fixes=(.95, 1, 1.14, 1.24), tenor=dates[2]):
+def SABR_backbone_plot(beta=1, bounds=None, shift=0, strikes=strikes, fixes=(.95, 1, 1.14, 1.24), tenor=dates[2]):
     l = []
     for i in fixes:
         vol_surface = SABRVolatilitySurface(

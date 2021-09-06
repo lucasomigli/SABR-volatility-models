@@ -76,3 +76,53 @@ def smiles_comparison(models=[], heston_models=[], local_models=[], points=(.2, 
                      for s in strikes], "Local Volatility") for x in local_models])
         plot_smile(
             tenor, l, title="Volatility Smile for options expiring on {}".format(tenor))
+
+
+def density_IV(model, date):
+    t = (date - today) / 365
+    calls = []
+    minStrike, maxStrike = (
+        model.vol_surface.minStrike()*.5, model.vol_surface.maxStrike()*1.5)
+    dK = (maxStrike-minStrike)/len(strikes)/2
+
+    for K in np.arange(minStrike, maxStrike, dK):
+        sigma = model.vol_surface.blackVol(t, K)
+        price = ql.QuoteHandle(ql.SimpleQuote(current_price))
+        option = ql.EuropeanOption(ql.PlainVanillaPayoff(
+            ql.Option.Call, K), ql.EuropeanExercise(date))
+        volatility = ql.BlackConstantVol(
+            0, ql.TARGET(), sigma, ql.Actual365Fixed())
+        process = ql.BlackScholesProcess(price, ql.YieldTermStructureHandle(riskFreeCurve),
+                                         ql.BlackVolTermStructureHandle(volatility))
+        engine = ql.AnalyticEuropeanEngine(
+            process)
+        option.setPricingEngine(engine)
+        C = option.NPV()
+        calls.append(C)
+
+    xs = np.arange(minStrike, maxStrike, dK)
+    dCdK = np.gradient(calls, dK)
+    d2cdK2 = np.gradient(dCdK, dK)
+
+    return xs, d2cdK2
+
+
+def plot_densityIV(model):
+
+    plt.figure(figsize=plot_size)
+    fig, axs = plt.subplots(2, 4, figsize=plot_size)
+    plt.subplots_adjust(left=None, bottom=None, right=1.5,
+                        top=1.5, wspace=None, hspace=None)
+
+    for i, d in enumerate([dates[round((len(dates)-1) * x)] for x in np.arange(0, .5, .5/4)]):
+        axs[0, i].plot(density_IV(model, d)[0],
+                       density_IV(model, d)[1])
+        axs[0, i].set_title('tenor: {}'.format(d))
+        axs[0, i].set(xlabel='Strikes', ylabel='IV')
+        axs[0, i].legend()
+    for i, d in enumerate([dates[round((len(dates)-1) * x)] for x in np.arange(.5, 1, .5/4)]):
+        axs[1, i].plot(density_IV(model, d)[0],
+                       density_IV(model, d)[1])
+        axs[1, i].set_title('tenor: {}'.format(d))
+        axs[1, i].set(xlabel='Strikes', ylabel='IV')
+        axs[1, i].legend()

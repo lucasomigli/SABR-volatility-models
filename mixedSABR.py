@@ -27,7 +27,7 @@ class MixtureSABRSmile:
 
         # # calibrate the Free Zero-Correlation SABR first
         self.freeSABR = SABRSmile(
-            date=self.date, beta=.5, method="floch-kennedy", fwd=self.fwd, zero_rho=True)
+            date=self.date, beta=.5, marketVols=self.marketVols, method="floch-kennedy", fwd=self.fwd, zero_rho=True)
         self.freeSABR.initialize()
         self.alpha_free = self.freeSABR.alpha
         self.beta_free = self.freeSABR.beta

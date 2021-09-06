@@ -8,7 +8,7 @@ import math
 import QuantLib as ql
 from scipy.optimize import minimize
 
-data = "SILVER"
+data = "OIL"
 
 
 def date_pd_to_ql(date):
@@ -87,6 +87,8 @@ elif data == "SILVER":
 
 maturities = df["Date"].unique()
 strikes = df["Strike"].unique()
+
+shft = .50 * current_price
 
 ql.Settings.instance().evaluationDate = today
 calendar = ql.NullCalendar()
