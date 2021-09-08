@@ -19,10 +19,12 @@ def compute_time():
 
     # Local Volatility
     start = time.time()
-    ql.NoExceptLocalVolSurface(
-        ql.BlackVolTermStructureHandle(black_var_surface), flat_ts, dividend_ts, spot_quote, .15)
+    black_var_surface.setInterpolation("bicubic")
+    local_vol_handle = ql.BlackVolTermStructureHandle(black_var_surface)
+    local_vol_surface = ql.NoExceptLocalVolSurface(
+        local_vol_handle, flat_ts, dividend_ts, spot_quote, .15)
     end = time.time()
-    times_data.update({"SABR Volatility Surface": end-start})
+    times_data.update({"Local Volatility": end-start})
 
     # Heston
     start = time.time()

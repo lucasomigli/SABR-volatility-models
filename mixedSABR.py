@@ -20,6 +20,7 @@ class MixtureSABRSmile:
         self.beta_free = .5
         self.nu_free = .1
         self.rho_free = 0.
+        self.errors_N, self.errors_free = ([], [])
 
         self.initialize()
 
@@ -32,6 +33,8 @@ class MixtureSABRSmile:
         self.alpha_free = self.freeSABR.alpha
         self.beta_free = self.freeSABR.beta
         self.nu_free = self.freeSABR.nu
+        self.error_free = self.freeSABR.error
+        self.normVols, self.error_N = ([], None)
 
         # alpha, beta, nu, rho (Normal, free)
         cons = (
@@ -57,8 +60,11 @@ class MixtureSABRSmile:
         params = [self.alpha_N, self.beta_N, self.nu_N, self.rho_N, self.alpha_free,
                   self.beta_free, self.nu_free, self.rho_free] = result['x']
 
+        self.normVols = []
         self.newVols = [self.calibrate_volatilities(
             strike, params) for strike in strikes]
+        self.error_N = (
+            (self.normVols - np.array(self.marketVols))**2).mean() ** .5
 
     def calibrate_volatilities(self, strike, params):
 
@@ -68,6 +74,8 @@ class MixtureSABRSmile:
 
         normalSABR = ql.sabrVolatility(
             strike, self.fwd, self.expiryTime, *params[:4])
+
+        self.normVols.append(normalSABR)
 
         return math.sqrt((p**2) * self.freeSABR.newVols[int(np.where(strikes == strike)[0])] + ((1-p)**2) * normalSABR)
 
@@ -90,6 +98,7 @@ class MixtureSABRVolatilitySurface:
         self.vol_surface_vector, self.errors = [], []
         self.alpha_N, self.beta_N, self.nu_N, self.rho_N = [], [], [], []
         self.alpha_free, self.beta_free, self.nu_free, self.rho_free = [], [], [], []
+        self.errors_free, self.errors_N = ([], [])
 
         self.initialize()
 
@@ -111,6 +120,8 @@ class MixtureSABRVolatilitySurface:
             self.rho_N.append(volMixedSABR.rho_N)
             self.rho_free.append(volMixedSABR.rho_free)
 
+            self.errors_N.append(volMixedSABR.error_N)
+            self.errors_free.append(volMixedSABR.error_free)
             self.errors.append(volMixedSABR.error)
 
             smile = volMixedSABR.newVols
@@ -129,7 +140,8 @@ class MixtureSABRVolatilitySurface:
     def to_data(self):
         d = {'alpha_free': self.alpha_free, 'beta_free': self.beta_free, 'nu_free': self.nu_free, 'rho_free': self.rho_free,
              'alpha_N': self.alpha_free, 'beta_N': self.beta_N, 'nu_N': self.nu_N, 'rho_N': self.rho_N,
-             'MSE': self.errors,
+             'Normal SABR RMSE': self.errors_N, 'Free Boundary SABR RMSE': self.errors_free,
+             'RMSE': self.errors,
              }
         return pd.DataFrame(data=d, index=self.dates)
 
@@ -159,7 +171,15 @@ class MixtureSABRVolatilitySurface:
         axs[1, 0].set_title('Rho Normal SABR')
         axs[1, 0].set(xlabel='time to expiry (in years)', ylabel='value')
         axs[1, 0].legend()
-        axs[1, 1].plot(x_values, self.errors, label="Relative Error %")
-        axs[1, 1].set_title('Relative Error %')
+        axs[1, 1].plot(x_values, self.errors, label="Mixture SAVBR RMSE")
+        axs[1, 1].set_title('RMSE')
         axs[1, 1].set(xlabel='time to expiry (in years)', ylabel='value')
         axs[1, 1].legend()
+        axs[1, 2].plot(x_values, self.errors_N, label="Normal SABR RMSE")
+        axs[1, 2].set_title('RMSE')
+        axs[1, 2].set(xlabel='time to expiry (in years)', ylabel='value')
+        axs[1, 2].legend()
+        axs[1, 3].plot(x_values, self.errors_free, label="FB SABR RMSE")
+        axs[1, 3].set_title('RMSE')
+        axs[1, 3].set(xlabel='time to expiry (in years)', ylabel='value')
+        axs[1, 3].legend()
