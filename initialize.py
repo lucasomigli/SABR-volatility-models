@@ -8,7 +8,7 @@ import math
 import QuantLib as ql
 from scipy.optimize import minimize
 
-data = "COFFEE"
+data = "GOLD"
 
 
 def date_pd_to_ql(date):

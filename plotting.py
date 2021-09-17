@@ -119,10 +119,8 @@ def plot_densityIV(model):
                        density_IV(model, d)[1])
         axs[0, i].set_title('tenor: {}'.format(d))
         axs[0, i].set(xlabel='Strikes', ylabel='IV')
-        axs[0, i].legend()
     for i, d in enumerate([dates[round((len(dates)-1) * x)] for x in np.arange(.5, 1, .5/4)]):
         axs[1, i].plot(density_IV(model, d)[0],
                        density_IV(model, d)[1])
         axs[1, i].set_title('tenor: {}'.format(d))
         axs[1, i].set(xlabel='Strikes', ylabel='IV')
-        axs[1, i].legend()
