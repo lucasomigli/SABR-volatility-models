@@ -19,10 +19,22 @@ def compute_time():
 
     # Local Volatility
     start = time.time()
+
+    volMatrix = ql.Matrix(len(strikes), len(dates))
+
+    for i in range(len(vols)):
+        for j in range(len(vols[i])):
+            volMatrix[j][i] = vols[i][j]
+
+    black_var_surface = ql.BlackVarianceSurface(
+        today, calendar, dates, strikes, volMatrix, day_count)
+    black_var_surface.enableExtrapolation()
+
     black_var_surface.setInterpolation("bicubic")
     local_vol_handle = ql.BlackVolTermStructureHandle(black_var_surface)
-    local_vol_surface = ql.NoExceptLocalVolSurface(
-        local_vol_handle, flat_ts, dividend_ts, spot_quote, .15)
+    local_vol_surface = ql.LocalVolSurface(
+        local_vol_handle, flat_ts, dividend_ts, spot_quote)
+
     end = time.time()
     times_data.update({"Local Volatility": end-start})
 
@@ -61,3 +73,6 @@ def compute_time():
     times_data.update({"Mixture SABR": end-start})
 
     return times_data
+
+
+compute_time()
