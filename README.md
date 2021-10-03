@@ -5,6 +5,9 @@ Main question: How accurate are new stochastic volatility models in calculating 
 A research that will go trogh a bried history of implied volatility over the last decades, as well as a in depth statistical research on effectiveness on models such as the Heston stochastic volatility, SABR free, normal and shifted models. Graphical and statistical analysis of the models using volatility smiles and surfaces.
 To add to the main topic, how good are these models with respect to negative interest rates environonments?
 
+### Usage
+Download the folder and use the notebook file for showing the results. Change the initial variable data in initialize.py to "GOLD", "SILVER" or "COFFEE" to load related dataset. Restart the kernel and run cells to update results. 
+
 ### Main
 - [X] Plot implied option prices against market prices with respect to each model
 - [X] Organise thesis theoretical structure. Write down general concept
